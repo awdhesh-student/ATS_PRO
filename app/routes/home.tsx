@@ -1,13 +1,46 @@
+import Navbar from "~/components/Navbar";
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { resumes } from "../../constants";
+import ResumeCard from "~/components/ResumeCard";
+import { usePuterStore } from "~/lib/puter";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Friendly ATS" },
+    {
+      name: "description",
+      content: "A friendly ATS used to anaysle the resume according to the JD",
+    },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  const { auth } = usePuterStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!auth.isAuthenticated) {
+      navigate("/auth?next=/");
+    }
+  }, [auth.isAuthenticated]);
+  return (
+    <main className="bg-[url('/images/bg-main.svg')] bg-cover">
+      <Navbar />
+      <section className="main-section">
+        <div className="page-heading px-16">
+          <h1>Friendly ATS</h1>
+          <h2>Review and get AI feedback</h2>
+        </div>
+        {resumes?.length > 0 && (
+          <div className="resumes-section">
+            {resumes.map((resume: (typeof resumes)[number]) => (
+              <ResumeCard key={resume.id} resume={resume} />
+            ))}
+          </div>
+        )}
+      </section>
+    </main>
+  );
 }
