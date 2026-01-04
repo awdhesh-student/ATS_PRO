@@ -1,87 +1,102 @@
-# Welcome to React Router!
+# Friendly ATS (Applicant Tracking System)
 
-A modern, production-ready template for building full-stack React applications using React Router.
+## Overview
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+Friendly ATS is a modern, AI-powered web application designed to help job seekers analyze and improve their resumes. By leveraging AI, it provides detailed feedback on how well a resume matches a specific job description, simulating the Applicant Tracking Systems used by employers.
 
 ## Features
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- **Resume Analysis**: Upload your resume (PDF) along with the Job Description (JD) to get instant AI-driven feedback.
+- **ATS Scoring**: Receive a score (0-100) representing your resume's strength against the target job.
+- **Detailed Feedback**: Get actionable insights, including "Good" points and "Improvements" needed.
+- **Dashboard**: View a history of all your analyzed resumes with their scores and details.
+- **Secure Storage**: Resumes and analysis results are securely stored using cloud storage (Puter.js).
+- **Authentication**: Integrated user authentication to manage personal resume history.
+- **Responsive Design**: A clean, mobile-friendly interface built with Tailwind CSS.
 
-## Getting Started
+## Tech Stack
 
-### Installation
+- **Framework**: [React v19] via [React Router v7]
+- **Language**: [TypeScript]
+- **Styling**: [Tailwind CSS v4]
+- **State Management**: [Zustand]
+- **Backend & AI Services**: [Puter.js] - (handles Auth, KV Storage, File System, and AI inference)
+- **PDF Handling**: PDF.js for client-side processing
 
-Install the dependencies:
+## Data Storage & Architecture
 
-```bash
-npm install
-```
+Friendly ATS operates without a traditional backend database (like SQL or MongoDB). Instead, it utilizes **Puter.js** to provide a serverless, cloud-native storage solution.
 
-### Development
+### Database (Key-Value Store)
 
-Start the development server with HMR:
+- **Service**: Puter.js Key-Value (KV) Store.
+- **Function**: Acts as the primary database for storing metadata.
+- **Data Structure**: Stores resume details in a JSON format.
+  - **Key**: `resume:{uuid}`
+  - **Value**: A JSON string containing the Job Title, Company Name, Feedback Analysis, and paths to stored files.
 
-```bash
-npm run dev
-```
+### File Storage (Blob Storage)
 
-Your application will be available at `http://localhost:5173`.
+- **Service**: Puter.js File System.
+- **Function**: Stores the actual binary files.
+- **Usage**:
+  - The original PDF resume is uploaded and stored securely.
+  - The PDF is converted to an image format for easier processing and visualization, which is also stored in the file system.
 
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
+## Project Structure
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+ATS/
+├── app/
+│   ├── components/      # Reusable UI components (FileUploader, ATS Score, etc.)
+│   ├── lib/            # Utilities and services (Puter.js integration, PDF conversion)
+│   ├── routes/         # Application routes (Home, Upload, Resume Details, etc.)
+│   ├── routes.ts       # Route definitions
+│   └── root.tsx        # Root layout and entry point
+├── public/             # Static assets (images, icons)
+├── package.json        # Dependencies and scripts
+└── vite.config.ts      # Vite configuration
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+## Setup & Installation
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+1.  **Clone the repository:**
 
-### DIY Deployment
+    ```bash
+    git clone <repository-url>
+    cd ATS
+    ```
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+2.  **Install dependencies:**
 
-Make sure to deploy the output of `npm run build`
+    ```bash
+    npm install
+    ```
 
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
+3.  **Run functionality:**
+    This project heavily relies on **Puter.js** for backend services (AI, Storage, Auth). Ensure you have the necessary environment setup or that the library handles the connection automatically via the `usePuterStore` hook.
 
-## Styling
+4.  **Start the development server:**
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+    ```bash
+    npm run dev
+    ```
 
----
+5.  **Build for production:**
+    ```bash
+    npm run build
+    npm start
+    ```
 
-Built with ❤️ using React Router.
+## Usage
+
+1.  **Dashboard**: Upon logging in, you will see a list of your previously analyzed resumes.
+2.  **New Scan**: Click "Upload Resume" to start a new analysis.
+3.  **Form**: Enter the **Company Name**, **Job Title**, **Job Description**, and select your **Resume PDF**.
+4.  **Results**: Wait for the AI to process (convert, analyze, score) and view your detailed ATS report.
+
+## Scripts
+
+- `npm run dev`: Starts the development server.
+- `npm run build`: Builds the app for production.
+- `npm run start`: Serves the built application.

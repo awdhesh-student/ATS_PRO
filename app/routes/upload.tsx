@@ -72,8 +72,8 @@ const upload = () => {
     data.feedback = JSON.parse(feedbackText);
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
     setText("Analysis complete, redirecting...");
-    
-     navigate(`/resume/${uuid}`);
+
+    navigate(`/resume/${uuid}`);
   };
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -90,9 +90,26 @@ const upload = () => {
     if (!file) return;
     handleAnalyze({ companyName, jobTitle, jobDescription, file });
   };
+
+  const handleLogout = async () => {
+    await auth.signOut();
+    navigate("/auth?next=/", { replace: true });
+  };
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover">
-      <Navbar />
+      <div className="flex items-center">
+        <Navbar />
+        {auth.isAuthenticated && (
+          <div className="flex justify-end px-4">
+            <button
+              onClick={handleLogout}
+              className="primary-button bg-red-500 hover:bg-red-600"
+            >
+              Logout
+            </button>
+          </div>
+        )}
+      </div>
       <section className="main-section">
         <div className="page-heading py-16">
           <h1>Smart Feedback from AI for your Job</h1>
