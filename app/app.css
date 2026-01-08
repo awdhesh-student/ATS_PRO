@@ -142,10 +142,10 @@ form {
 }
 
 @utility primary-gradient {
-  background: linear-gradient(to bottom, #8e98ff, #606beb);
+  background: linear-gradient(to bottom, #57abddbd, #0769adb5);
   box-shadow: 0px 74px 21px 0px #6678ef00;
 }
-
+/* linear-gradient(to bottom, #57abddbd, #0769adb5) */
 @utility primary-gradient-hover {
   background: linear-gradient(to bottom, #717dff, #4957eb);
 }

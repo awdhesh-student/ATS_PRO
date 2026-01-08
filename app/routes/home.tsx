@@ -48,14 +48,14 @@ export default function Home() {
     navigate("/auth?next=/", { replace: true });
   };
   return (
-    <main className="bg-[url('/images/bg-main.svg')] bg-cover">
+    <main className="bg-[url('/images/bg-main.webp')] bg-cover">
       <div className="flex items-center">
         <Navbar />
         {auth.isAuthenticated && (
           <div className="flex justify-end px-4">
             <button
               onClick={handleLogout}
-              className="primary-button bg-red-500 hover:bg-red-600"
+              className="primary-button"
             >
               Logout
             </button>
