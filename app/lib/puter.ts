@@ -12,7 +12,7 @@ declare global {
       fs: {
         write: (
           path: string,
-          data: string | File | Blob
+          data: string | File | Blob,
         ) => Promise<File | undefined>;
         read: (path: string) => Promise<Blob>;
         upload: (file: File[] | Blob[]) => Promise<FSItem>;
@@ -24,11 +24,11 @@ declare global {
           prompt: string | ChatMessage[],
           imageURL?: string | PuterChatOptions,
           testMode?: boolean,
-          options?: PuterChatOptions
+          options?: PuterChatOptions,
         ) => Promise<Object>;
         img2txt: (
           image: string | File | Blob,
-          testMode?: boolean
+          testMode?: boolean,
         ) => Promise<string>;
       };
       kv: {
@@ -58,7 +58,7 @@ interface PuterStore {
   fs: {
     write: (
       path: string,
-      data: string | File | Blob
+      data: string | File | Blob,
     ) => Promise<File | undefined>;
     read: (path: string) => Promise<Blob | undefined>;
     upload: (file: File[] | Blob[]) => Promise<FSItem | undefined>;
@@ -70,15 +70,15 @@ interface PuterStore {
       prompt: string | ChatMessage[],
       imageURL?: string | PuterChatOptions,
       testMode?: boolean,
-      options?: PuterChatOptions
+      options?: PuterChatOptions,
     ) => Promise<AIResponse | undefined>;
     feedback: (
       path: string,
-      message: string
+      message: string,
     ) => Promise<AIResponse | undefined>;
     img2txt: (
       image: string | File | Blob,
-      testMode?: boolean
+      testMode?: boolean,
     ) => Promise<string | undefined>;
   };
   kv: {
@@ -87,7 +87,7 @@ interface PuterStore {
     delete: (key: string) => Promise<boolean | undefined>;
     list: (
       pattern: string,
-      returnValues?: boolean
+      returnValues?: boolean,
     ) => Promise<string[] | KVItem[] | undefined>;
     flush: () => Promise<boolean | undefined>;
   };
@@ -314,14 +314,13 @@ export const usePuterStore = create<PuterStore>((set, get) => {
     prompt: string | ChatMessage[],
     imageURL?: string | PuterChatOptions,
     testMode?: boolean,
-    options?: PuterChatOptions
+    options?: PuterChatOptions,
   ) => {
     const puter = getPuter();
     if (!puter) {
       setError("Puter.js not available");
       return;
     }
-    // return puter.ai.chat(prompt, imageURL, testMode, options);
     return puter.ai.chat(prompt, imageURL, testMode, options) as Promise<
       AIResponse | undefined
     >;
@@ -350,7 +349,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
           ],
         },
       ],
-      { model: "claude-opus-4-5-20251101" }
+      { model: "claude-opus-4-5-20251101" },
     ) as Promise<AIResponse | undefined>;
   };
 
@@ -436,7 +435,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
         prompt: string | ChatMessage[],
         imageURL?: string | PuterChatOptions,
         testMode?: boolean,
-        options?: PuterChatOptions
+        options?: PuterChatOptions,
       ) => chat(prompt, imageURL, testMode, options),
       feedback: (path: string, message: string) => feedback(path, message),
       img2txt: (image: string | File | Blob, testMode?: boolean) =>
